@@ -11,7 +11,6 @@ gleam add dag_json@1
 ```
 ```gleam
 import dag_json as codec
-import gleam/json
 
 pub fn code_test() {
   codec.code()
@@ -23,8 +22,9 @@ pub fn name_test() {
   |> should.equal("dag-json")
 }
 
+// dag-json has a convention for encoding binary data
 pub fn encode() {
-  json.array([2], json.int)
+  codec.binary(<<1, 2>>)
   |> codec.encode
 }
 

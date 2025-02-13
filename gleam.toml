@@ -1,5 +1,5 @@
 name = "dag_json"
-version = "1.0.0"
+version = "1.1.0"
 target = "javascript"
 description = "Bindings to the js implementation of dag-json."
 licences = ["Apache-2.0"]

@@ -34,3 +34,9 @@ pub fn invalid_decode_test() {
   |> codec.decode
   |> should.equal(Error("Error: Invalid encoded CID form"))
 }
+
+pub fn encode_binary_test() {
+  codec.binary(<<>>)
+  |> json.to_string
+  |> should.equal("{\"/\":{\"bytes\":\"\"}}")
+}
