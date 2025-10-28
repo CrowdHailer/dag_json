@@ -15,7 +15,7 @@ export function encode(node) {
 
 export function decode(data) {
   try {
-    return new Ok(dagJSON.decode(data.buffer))
+    return new Ok(dagJSON.decode(data.rawBuffer))
   } catch (error) {
     return new Error(`${error}`)
   }

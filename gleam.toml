@@ -1,5 +1,5 @@
 name = "dag_json"
-version = "1.1.0"
+version = "1.2.0"
 target = "javascript"
 description = "Bindings to the js implementation of dag-json."
 licences = ["Apache-2.0"]
@@ -8,7 +8,7 @@ links = []
 
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
-gleam_json = ">= 2.3.0 and < 3.0.0"
+gleam_json = ">= 2.3.0 and < 4.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
