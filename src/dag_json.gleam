@@ -1,18 +1,23 @@
 import gleam/bit_array
-import gleam/dynamic.{type Dynamic}
+import gleam/dynamic/decode
 import gleam/json.{type Json}
+import gleam/list
+import multiformats/cid/v1
+import multiformats/hashes
 
-@external(javascript, "./dag_json_ffi.mjs", "code")
-pub fn code() -> Int
+pub fn code() -> Int {
+  297
+}
 
-@external(javascript, "./dag_json_ffi.mjs", "name")
-pub fn name() -> String
+pub fn name() -> String {
+  "dag-json"
+}
 
-@external(javascript, "./dag_json_ffi.mjs", "encode")
-pub fn encode(node: Json) -> BitArray
-
-@external(javascript, "./dag_json_ffi.mjs", "decode")
-pub fn decode(data: BitArray) -> Result(Dynamic, String)
+pub fn encode(node: Json) -> BitArray {
+  node
+  |> json.to_string()
+  |> bit_array.from_string()
+}
 
 pub fn binary(bytes) {
   let encoded = bit_array.base64_encode(bytes, False)
@@ -35,6 +40,36 @@ pub const null = json.null
 
 pub const nullable = json.nullable
 
-pub const object = json.object
+pub fn object(entries) {
+  list.sort(entries, fn(a, b) {
+    let #(key_a, _value) = a
+    let #(key_b, _value) = b
+    bit_array.compare(
+      bit_array.from_string(key_a),
+      bit_array.from_string(key_b),
+    )
+  })
+  |> json.object
+}
 
 pub const array = json.preprocessed_array
+
+pub fn decode_bytes() {
+  use bytes <- decode.field("/", {
+    use encoded <- decode.field("bytes", decode.string)
+    case bit_array.base64_decode(encoded) {
+      Ok(bytes) -> decode.success(bytes)
+      Error(_) -> decode.failure(<<>>, "Invalid base64")
+    }
+  })
+  decode.success(bytes)
+}
+
+pub fn decode_cid() {
+  use cid <- decode.field("/", decode.string)
+  case v1.from_string(cid) {
+    Ok(#(cid, _)) -> decode.success(cid)
+    Error(reason) ->
+      decode.failure(v1.Cid(0, hashes.Multihash(hashes.Sha256, <<>>)), reason)
+  }
+}

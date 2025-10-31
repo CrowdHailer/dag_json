@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@ipld/dag-json": "^10.2.3"
-  }
-}

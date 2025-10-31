@@ -23,18 +23,6 @@ pub fn encode_test() {
   |> should.equal(<<"[2]">>)
 }
 
-pub fn decode_test() {
-  <<"{\"bar\":\"baz\"}">>
-  |> codec.decode
-  |> should.be_ok()
-}
-
-pub fn invalid_decode_test() {
-  <<"{\"/\":\"foo\",\"bar\":\"baz\"}">>
-  |> codec.decode
-  |> should.equal(Error("Error: Invalid encoded CID form"))
-}
-
 pub fn encode_binary_test() {
   codec.binary(<<>>)
   |> json.to_string

@@ -1,36 +1,34 @@
 # dag_json
 
-Bindings to the [js implementation](https://github.com/ipld/js-dag-json) of dag-json.
-
 [![Package Version](https://img.shields.io/hexpm/v/dag_json)](https://hex.pm/packages/dag_json)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/dag_json/)
 
+> The native JSON IPLD format is called DAG-JSON to disambiguate it from regular JSON. Most simple JSON objects are valid DAG-JSON. The primary differences are:
+>
+> - Bytes and Links are supported with special use of single-key ("/") map.
+> - In limited cases, maps with the key "/" other than those used to encode Bytes and Links, are disallowed.
+> - Maps are sorted by key.
+
 ```sh
-npm install --save @ipld/dag-json@10
 gleam add dag_json@1
 ```
+
+DAG-JSON is a specification of a binary format so `dag_json.encode` returns a `BitArray`
+DAG-JSON is a valid JSON document so decode using the `json` library.
+This library includes two decode helpers to return `BitArray` and `Cid` data types.
+
 ```gleam
-import dag_json as codec
+import dag_json
 
-pub fn code_test() {
-  codec.code()
-  |> should.equal(297)
-}
-
-pub fn name_test() {
-  codec.name()
-  |> should.equal("dag-json")
-}
-
-// dag-json has a convention for encoding binary data
 pub fn encode() {
-  codec.binary(<<1, 2>>)
-  |> codec.encode
+  dag_json.binary(<<1, 2>>)
+  |> dag_json.encode
 }
 
-pub fn decode() {
-  <<"{\"bar\":\"baz\"}">>
-  |> codec.decode
+pub fn decoder() {
+  use bytes <- decode.field("foo", dag_json.decode_bytes)
+  use ref <- decode.field("link",dag_json.decode_cid)
+  todo
 }
 ```
 
