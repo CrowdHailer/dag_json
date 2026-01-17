@@ -24,6 +24,9 @@ pub fn binary(bytes) {
   json.object([#("/", json.object([#("bytes", json.string(encoded))]))])
 }
 
+/// pass in string, assumed to be cid.
+/// The v1.to_string function fails if the cid contains negative numbers, it shouldn't.
+/// that return Error when leb128 encoding.
 pub fn cid(cid) {
   json.object([#("/", json.string(cid))])
 }
